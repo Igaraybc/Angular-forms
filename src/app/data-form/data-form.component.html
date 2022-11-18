@@ -1,0 +1,124 @@
+<form [formGroup]="formulario" (ngSubmit)="submit()" class='mb-3'>
+    <div class='form-group'>
+        <div class="mb-3 col-sm-12">
+          <app-input-field  [classeCss]="mostrarErro('nome')" id="nome" label="Nome" [control]="formulario.get('nome')" placeholder="Digite seu nome." formControlName="nome"></app-input-field>
+            <!--label for="nome" class="form-label">Usuário</label>
+            <IMPORTANTE: colocar o formControlName de acordo com o nome que
+                foi colocado no formControl do componente-->
+        </div>
+        <div class="mb-3 col-sm-12">
+          <app-input-field  [classeCss]="mostrarErro('email')" id="email" label="Email" [control]="formulario.get('email')" placeholder="example@email.com" formControlName="email"></app-input-field>
+        </div>
+        <div class="mb-3 col-sm-12">
+          <app-input-field  [classeCss]="mostrarErro('confirmarEmail')" id="confirmarEmail" label="Confirmar Email" [control]="formulario.get('confirmarEmail')" placeholder="example@email.com" formControlName="confirmarEmail"></app-input-field>
+        </div>
+        <div class="row" formGroupName="endereco">
+            <div class="mb-3 col-md-3">
+              <app-input-field  [classeCss]="mostrarErro('endereco.cep')" id="cep" label="CEP" [control]="formulario.get('endereco.cep')" placeholder="Digite seu CEP" formControlName="cep"></app-input-field>
+            </div>
+            <div class="mb-3 col-md-3">
+              <app-input-field  [classeCss]="mostrarErro('endereco.numero')" id="numero" label="Número" [control]="formulario.get('endereco.numero')" formControlName="numero"></app-input-field>
+            </div>
+            <div class="mb-3 col-md-6">
+                <label for="complemento" class="form-label">Complemento</label>
+                <input [class]="mostrarErro('endereco.complemento')" formControlName='complemento' placeholder="Ex.: apto 102" type="text" class="form-control" id="complemento">
+                <div class="valid-feedback"></div>
+            </div>
+            <div class="mb-3 col-sm-12">
+                <label for="rua" class="form-label">Rua</label>
+                <input formControlName='rua' [class]="mostrarErro('endereco.rua')" type="text" class="form-control" id="rua">
+                <app-error-msg [control]="formulario.get('endereco.rua')" label="Rua"></app-error-msg>
+            </div>
+            <div class="mb-3 col-md-5">
+                <label for="bairro" class="form-label">Bairro</label>
+                <input  formControlName='bairro' [class]="mostrarErro('endereco.bairro')"type="text" class="form-control" id="bairro">
+                <app-error-msg [control]="formulario.get('endereco.bairro')" label="Bairro"></app-error-msg>
+            </div>
+            <div class="mb-3 col-md-4">
+              <label for="cidade" class="form-label">Cidade</label>
+              <select formControlName='cidade' [class]="mostrarErro('endereco.cidade')" class="form-select" id="cidade">
+                <option>Selecione uma Cidade</option>
+                <option *ngFor="let cidade of cidades" [value]="cidade.nome">{{cidade.nome}}</option>
+              </select>
+              <app-error-msg [control]="formulario.get('endereco.cidade')" label="Cidade"></app-error-msg>
+            </div>
+            <div class="mb-3 col-md-3">
+                <label for="estado" class="form-label">Estado</label>
+                <select formControlName='estado' [class]="mostrarErro('endereco.estado')" class="form-select" id="estado">
+                  <option>Selecione um estado</option>
+                  <option *ngFor="let estado of estados" [value]="estado.sigla">{{estado.nome}} - {{estado.sigla}}</option>
+                  <!--Pra evitar vazamento de memória-->
+                </select>
+                <app-error-msg [control]="formulario.get('endereco.estado')" label="Estado"></app-error-msg>
+            </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="mb-3 col-md-5">
+              <label for="cargo" class="form-label">Cargo</label>
+              <select formControlName='cargo' [class]="mostrarErro('cargo')" class="form-select" id="cargo" [compareWith]="compararCargos" >
+                <!--CompareWith indica qual critério o select tem que usar pra comparar os valores do cargo-->
+                <option *ngFor="let cargo of cargos"[ngValue]="cargo">{{ cargo.desc }}</option>
+              </select>
+              <app-error-msg [control]="formulario.get('cargo')" label="Cargo"></app-error-msg>
+          </div>
+          <!--BUTTON SELECT MULTIPLE-->
+          <div class="mb-3 col-md-4">
+            <label for="tecnologia" class="form-label">Tecnologias</label>
+            <select multiple formControlName='tecnologia' [class]="mostrarErro('tecnologia')" class="form-select" id="tecnologia" [compareWith]="compararCargos" >
+              <option *ngFor="let tecnologia of tecnologias" [value]="tecnologia.nome">{{ tecnologia.desc }}</option>
+            </select>
+            <app-error-msg [control]="formulario.get('tecnologia')" label="Tecnologia"></app-error-msg>
+          </div>
+          <!--RADIO BUTTON: listar as opções através do ngFor e fazer ligação com o formulário-->
+          <div class="mb-3 col-md-3">
+            <label for="newsletter" class="form-label">NewsLetter</label>
+            <div id="newsletter">
+              <div class="col-sm-4 form-check form-check-inline" *ngFor="let item of newsletterop">
+                <label class="form-check-label">
+                   <input type="radio" [value]="item.valor" class="form-check-input" formControlName="newsletter" /> {{ item.desc }}
+                </label>
+              </div>
+            </div>
+            <app-error-msg [control]="formulario.get('newsletter')" label="Newsletter"></app-error-msg>
+          </div>
+        </div>
+        <!--CHECKBOX TOGGLE-->
+        <div class="form-group row">
+          <div class="mb-3 col-md-3">
+            <div class="form-check form-check-inline">
+              <input [class]="mostrarErro('termos')" formControlName="termos" class="form-check-input" type="checkbox" value="" id="termos">
+              <label class="form-check-label" for="termos">
+                Li e concordo com os termos de uso
+              </label>
+              <div class="invalid-feedback">Você precisa concordar antes de submeter.</div>
+            </div>
+          </div>
+          <!--CHECKBOX DINÂMICO FormArray: o usuário pode marcar um ou mais checkboxes de um grupo de checkbox-->
+          <!--Validação para que o usuário precise marcar pelo menos um-->
+          <div class="mb-3 col-md-3">
+            <label class="form-label" for="frameworks">FrameWorks</label>
+            <div id="frameworks">
+              <!--mostrarErro está nessa div pra englobar todas as opções que fazem parte desse formArray-->
+              <div [class]="mostrarErro('frameworks')" class="form-check form-check-inline" formArrayName="frameworks" *ngFor="let item of formData.controls; let i = index">
+                <input  [class]="mostrarErro('frameworks')" [formControlName]="i" class="form-check-input" type="checkbox">
+                <label class="form-check-label">
+                  {{frameworks[i]}}
+                </label>
+              </div>
+              <div class="invalid-feedback">Selecione pelo menos 1 opção</div>
+            </div>
+          </div>
+        </div>
+
+        <!--A disabled do botão pode ser feita através do mesmo método do template driven
+        <button type="submit" class="btn btn-primary" [disabled]="!formulario.valid">Enviar</button> Mas pode ser feita de outra forma-->
+        <button type="submit" class="btn btn-primary">Enviar</button>
+        <button class="btn btn-default" (click)="resetar()">Cancelar</button>
+        <button class="btn btn-info" (click)="setarCargo()">Cargo</button>
+        <button class="btn btn-info" (click)="setarTecnologia()">Tecnologia</button>
+    </div>
+  </div>
+</form>
+
+

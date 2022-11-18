@@ -1,0 +1,53 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div class='form-group'>
+        <div class="mb-3 col-sm-12" [class.was-validated]="nome.touched">
+            <label for="nome" class="form-label">Usuário</label>
+            <input #nome="ngModel" required [(ngModel)]="usuario.nome" placeholder="Digite seu nome." class="form-control" id="nome" name="nome">
+            <div class="invalid-feedback" *ngIf="mostrarErro(nome)">Campo obrigatório.</div>
+        </div>
+        <div class="mb-3 col-sm-12" [class.was-validated]="email.touched">
+            <label for="email" class="form-label">Email</label>
+            <input #email="ngModel" [(ngModel)]="usuario.email" placeholder="exemplo@email.com" type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" >
+            <div class="invalid-feedback" *ngIf="email.invalid && email.touched">Campo obrigatório.</div>
+            <div *ngIf="email.valid" class="valid-feedback"></div>
+        </div>
+        <div class="row" ngModelGroup="address">
+            <div class="mb-3 col-md-3" [class.was-validated]="cep.touched">
+                <label for="cep" class="form-label">CEP</label>
+                <input (blur)="consultarCep($event.target, f)" pattern="[0-9]{5}-?[0-9]{3}" #cep="ngModel" required [(ngModel)]="usuario.cep" placeholder="Digite seu CEP" type="text" class="form-control" id="cep" name="cep">
+                <div class="invalid-feedback" *ngIf="mostrarErro(cep)">Campo obrigatório.</div>
+            </div>
+            <div class="col-md-3" [class.was-validated]="numero.touched">
+                <label for="numero" class="form-label">Número</label>
+                <input #numero="ngModel" required [(ngModel)]="usuario.numero" placeholder="N° da casa" type="number" class="form-control" id="numero" name="numero">
+                <div class="invalid-feedback" *ngIf="mostrarErro(numero)">Campo obrigatório.</div>
+            </div>
+            <div class=" col-md-6" [class.was-validated]="complemento.touched">
+                <label for="complemento" class="form-label">Complemento</label>
+                <input #complemento="ngModel" required [(ngModel)]="usuario.complemento" placeholder="Ex.: apto 102" type="number" class="form-control" id="complemento" name="complemento">
+                <div class="invalid-feedback" *ngIf="mostrarErro(complemento)">Campo obrigatório.</div>
+            </div>
+            <div class="mb-3 col-sm-12" [class.was-validated]="rua.touched">
+                <label for="rua" class="form-label">Rua</label>
+                <input #rua="ngModel" required [(ngModel)]="usuario.rua" type="text" class="form-control" id="rua" name="rua" [readonly]="readonly">
+                <div class="invalid-feedback" *ngIf="mostrarErro(rua)">Campo obrigatório.</div>
+            </div>
+            <div class="mb-3 col-md-5" [class.was-validated]="bairro.touched">
+                <label for="bairro" class="form-label">Bairro</label>
+                <input #bairro="ngModel" required [(ngModel)]="usuario.bairro" type="text" class="form-control" id="bairro" name="bairro" [readonly]="readonly">
+                <div class="invalid-feedback" *ngIf="mostrarErro(bairro)">Campo obrigatório.</div>
+            </div>
+            <div class="col-md-4" [class.was-validated]="cidade.touched">
+                <label for="cidade" class="form-label">Cidade</label>
+                <input #cidade="ngModel" required [(ngModel)]="usuario.cidade" type="text" class="form-control" id="cidade" name="cidade" [readonly]="readonly">
+                <div class="invalid-feedback" *ngIf="mostrarErro(cidade)">Campo obrigatório.</div>
+            </div>
+            <div class="col-md-3" [class.was-validated]="estado.touched">
+                <label for="estado" class="form-label">Estado</label>
+                <input #estado="ngModel" required [(ngModel)]="usuario.estado" type="text" class="form-control" id="estado" name="estado" [readonly]="readonly">
+                <div class="invalid-feedback" *ngIf="mostrarErro(estado)">Campo obrigatório.</div>
+            </div>
+        </div>
+        <button [disabled]="f.invalid" type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+</form>
